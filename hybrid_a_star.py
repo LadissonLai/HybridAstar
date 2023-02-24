@@ -24,7 +24,8 @@ N_STEER = 20  # number of steer command。转向分辨率，car定义的转向�
 
 # 定义路劲扩张时的一些代价参数：主要是实际代价值的计算
 SB_COST = 100.0  # switch back penalty cost
-BACK_COST = 5.0  # backward penalty cost
+# BACK_COST = 5.0  # backward penalty cost
+BACK_COST = 20.0  # backward penalty cost
 STEER_CHANGE_COST = 5.0  # steer angle change penalty cost
 STEER_COST = 1.0  # steer angle change penalty cost
 H_COST = 5.0  # Heuristic cost
@@ -391,30 +392,12 @@ def calc_index(node, c: Config):
 def main():
     print("Start Hybrid A* planning")
 
-    ox, oy = [], []
-
-    for i in range(60):
-        ox.append(i)
-        oy.append(0.0)
-    for i in range(60):
-        ox.append(60.0)
-        oy.append(i)
-    for i in range(61):
-        ox.append(i)
-        oy.append(60.0)
-    for i in range(61):
-        ox.append(0.0)
-        oy.append(i)
-    for i in range(40):
-        ox.append(20.0)
-        oy.append(i)
-    for i in range(40):
-        ox.append(40.0)
-        oy.append(60.0 - i)
+    ox, oy = generate_grid_map()
 
     # Set Initial parameters
     start = [10.0, 10.0, np.deg2rad(90.0)]
-    goal = [50.0, 50.0, np.deg2rad(-90.0)]
+    # goal = [50.0, 50.0, np.deg2rad(-90.0)]
+    goal = [23.0, 11.5, np.deg2rad(0)]
 
     print("start : ", start)
     print("goal : ", goal)
@@ -448,6 +431,46 @@ def main():
             plt.pause(0.0001)
 
     print(__file__ + " done!!")
+
+
+def generate_grid_map():
+    ox, oy = [], []
+    for i in range(80):
+        ox.append(i)
+        oy.append(0.0)
+    for i in range(60):
+        ox.append(80.0)
+        oy.append(i)
+    for i in range(81):
+        ox.append(i)
+        oy.append(60.0)
+    for i in range(61):
+        ox.append(0.0)
+        oy.append(i)
+    for i in range(40):
+        ox.append(20.0)
+        oy.append(i)
+    for i in range(40):
+        ox.append(40.0)
+        oy.append(60.0 - i)
+    for i in range(40):
+        ox.append(60.0)
+        oy.append(i)
+    # 车道线
+    for i in range(20, 30):
+        ox.append(i)
+        oy.append(10)
+    for i in range(20, 30):
+        ox.append(i)
+        oy.append(13)
+
+    # for i in range(60, 70):
+    #     ox.append(i)
+    #     oy.append(10)
+    # for i in range(60, 70):
+    #     ox.append(i)
+    #     oy.append(13)
+    return ox, oy
 
 
 if __name__ == '__main__':
